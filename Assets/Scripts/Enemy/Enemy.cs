@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,9 +21,10 @@ public class Enemy : MainBehavior, IAttackable, IHitable, IHealable
 
     bool attacking,Moving;
     bool free=true;
-    float waitTime;
+    float waitTime,wt;
     Transform TargetTransform;
-    Vector2 Direction;
+    Vector2 Direction,tt;
+    RaycastHit2D hit;
     // Use this for initialization
     public virtual void Start () {
         RG = GetComponent<Rigidbody2D>();
@@ -32,6 +32,8 @@ public class Enemy : MainBehavior, IAttackable, IHitable, IHealable
         anim = GetComponent<Animator>();
         TargetTransform = Camera.main.transform;
         InitializeData();
+        StartCoroutine(DirectionChooser());
+
     }
 
     // Update is called once per frame
@@ -56,8 +58,7 @@ public class Enemy : MainBehavior, IAttackable, IHitable, IHealable
         else
         {
             RG.bodyType = RigidbodyType2D.Dynamic;
-            Direction = TargetTransform.position - transform.position;
-            Direction.Normalize();
+           
             RG.velocity = Direction * speed;
             waitTime += Time.deltaTime;
             detectedCharacter = Physics2D.OverlapCircle(transform.position, range, CharacterLayer);
@@ -68,6 +69,38 @@ public class Enemy : MainBehavior, IAttackable, IHitable, IHealable
         anim.SetBool("Move", Moving);
 
 	}
+
+    public IEnumerator DirectionChooser()
+    {
+        Direction = Vector2.zero;
+        if (Vector2.Distance(TargetTransform.position, transform.position) < 2)
+        {
+            Direction = TargetTransform.position - transform.position;
+        }else
+        {
+            wt = Random.Range(0,100);
+            yield return new WaitForSeconds(Random.Range(0, 1f));
+            if (wt < 60)
+                Direction = TargetTransform.position - transform.position;
+            else
+            {
+                do
+                {
+                    tt = (Vector2)transform.position + Random.insideUnitCircle * 1;
+                    Direction = tt - (Vector2)transform.position;
+                    Direction.Normalize();
+                    hit = Physics2D.Raycast(transform.position, Direction, 1.5f, WallLayer);
+
+                } while (hit);
+                
+            }
+        }
+        Direction.Normalize();
+        yield return new WaitForSeconds(Random.Range(1, 1.7f));
+
+        StartCoroutine(DirectionChooser());
+
+    }
 
     void InitializeData()
     {
@@ -114,12 +147,13 @@ public class Enemy : MainBehavior, IAttackable, IHitable, IHealable
 
     public virtual void Die()
     {
+        GamePlayCharacterController.Instance.AddEnemyKill(1);
+        GPM.Ratick = data.ratick;
         Destroy(gameObject);
     }
 
     public void GetHeal(float amount)
     {
-        throw new NotImplementedException();
     }
 
 

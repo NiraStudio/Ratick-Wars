@@ -4,27 +4,38 @@ using UnityEngine;
 
 public class EnemySpawnPoint : MonoBehaviour {
     public GameObject[] Enemies;
+    public float firstAmount, nAmount;
+    public int MaxEnemies;
     Vector2 tt;
     GameObject g;
     GamePlayManager GPM;
-	IEnumerator Start()
+    float a;
+	void Start()
     {
         GPM = GamePlayManager.Instance;
-        yield return new WaitForSeconds(Random.Range(1, 2));
-        StartCoroutine(Spawn());
+        MaxEnemies = GPM.maxEnemies;
+        
+        StartCoroutine(Spawn(firstAmount));
     }
 
-    IEnumerator Spawn()
+    IEnumerator Spawn(float amount)
     {
         if (GPM.gameState != GamePlayState.Finished)
         {
-            for (int i = 0; i < 5; i++)
+            if (GameObject.FindObjectsOfType<Enemy>().Length < MaxEnemies)
             {
-                tt = (Vector2)transform.position + Random.insideUnitCircle * 1;
-                g = Instantiate(Enemies[Random.Range(0, Enemies.Length)], tt, Quaternion.identity);
+                for (int i = 0; i < amount; i++)
+                {
+                    tt = (Vector2)transform.position + Random.insideUnitCircle * 0.3f;
+                    g = Instantiate(Enemies[Random.Range(0, Enemies.Length)], tt, Quaternion.identity);
+                }
             }
             yield return new WaitForSeconds(3);
-            StartCoroutine(Spawn());
+            if (nAmount < 3)
+                nAmount += 0.3f;
+            else
+                nAmount = 3;
+            StartCoroutine(Spawn(nAmount));
         }
     }
 }

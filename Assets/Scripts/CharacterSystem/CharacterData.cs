@@ -7,12 +7,13 @@ using UnityEngine;
 public class CharacterData :ScriptableObject{
     public string characterNameCode;
     public CharacterQuality Quality;
+    public CharacterType Type;
     public Sprite icon;
     public GameObject prefab;
     public int id,hp;
     public float damage,attackSpeed,range,speed;
-    [Range(3,10)]
-    public int startSpawnCount, increaseCount;
+    [Range(3, 10)]
+    public int startSpawnCount;
     public string Code;
 
     public void setDirty()
@@ -27,3 +28,8 @@ public enum CharacterQuality
 {
     Common,Rare,Epic
 }
+public enum CharacterType
+{
+    Minion,Attacker,Miner
+}
+

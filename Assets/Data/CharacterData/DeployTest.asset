@@ -9,18 +9,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8d7c998b7f564b4286f390f76e698f1, type: 3}
-  m_Name: TestCharacter
+  m_Name: DeployTest
   m_EditorClassIdentifier: 
-  characterNameCode: TestCharacterMinion
+  characterNameCode: DeployTest
   Quality: 0
   Type: 0
-  icon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  prefab: {fileID: 1040293264552612, guid: b8f2a789e6c1903478e87cf008e21311, type: 2}
-  id: 1
-  hp: 20
+  icon: {fileID: 21300000, guid: 28b41fef228d6814f90e541deaf9f262, type: 3}
+  prefab: {fileID: 1631580017586638, guid: 007f1396f3be0cb4aaeed0c14429c550, type: 2}
+  id: 2
+  hp: 0
   damage: 5
-  attackSpeed: 1
-  range: 0.2
+  attackSpeed: 0
+  range: 1
   speed: 3
-  startSpawnCount: 6
+  startSpawnCount: 3
   Code: 

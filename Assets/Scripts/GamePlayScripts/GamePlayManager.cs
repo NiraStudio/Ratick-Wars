@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof( GamePlayCharacterController))]
+[RequireComponent(typeof( GamePlayUIManager))]
 public class GamePlayManager : MonoBehaviour {
     #region Singleton
     public static GamePlayManager Instance;
@@ -13,25 +15,34 @@ public class GamePlayManager : MonoBehaviour {
 
     public GamePlayState gameState;
     public float GameTime;
+    public int maxEnemies;
 
-    [SerializeField]
-    CameraController CMC;
 
-    List<GameObject> characters = new List<GameObject>();
-    public int CharacterCount
+
+
+    public int Ratick
     {
-        get { return characters.Count; }
+        get { return _ratick >> 3; }
+        set
+        {
+            int a = _ratick >> 3;
+            a += value;
+            _ratick = a << 3;
+            a = 0;
+        }
     }
 
+    [SerializeField]
+    int _ratick;
+
+
     //===========Test Vars==========
-    public Transform startPos;
-    public GameObject testCharacter;
     //==============================
 
 
     // Use this for initialization
     void Start () {
-        SpawnCharacters();
+
 	}
 	
 	// Update is called once per frame
@@ -39,7 +50,6 @@ public class GamePlayManager : MonoBehaviour {
         if (gameState == GamePlayState.Finished)
             return;
 
-        CheckForCharacters();
 
         GameTime -= Time.deltaTime;
         if (GameTime <= 0)
@@ -49,38 +59,11 @@ public class GamePlayManager : MonoBehaviour {
         }
 	}
 
-    void SpawnCharacters()
-    {
-        GameObject p = new GameObject();
-        p.name = "_Characters_";
-        Vector2 tt = new Vector2();
-        GameObject g;
-        for (int i = 0; i < 50; i++)
-        {
-            tt = (Vector2)startPos.position + Random.insideUnitCircle * 1;
-            g = Instantiate(testCharacter, tt, Quaternion.identity);
-            g.transform.SetParent(p.transform);
-            AddCharacter(g);
-        }
-    }
+    
 
-    void CheckForCharacters()
-    {
-        foreach (var item in characters.ToArray())
-        {
-            if (item == null)
-                characters.Remove(item);
-        }
-        CMC.ChangeTargets(characters);
-        if (CharacterCount == 0)
-            gameState = GamePlayState.Finished;
-    }
+    
 
-    public void AddCharacter(GameObject ch)
-    {
-        characters.Add(ch);
-    }
-
+    
     public void EndOfGame()
     {
         gameState = GamePlayState.Finished;

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   enemyName: Test
-  damage: 5
-  hp: 10
+  damage: 2
+  hp: 3
   attackSpeed: 1
-  speed: 2
-  range: 1
+  speed: 1.5
+  range: 0.2
   ratick: 5

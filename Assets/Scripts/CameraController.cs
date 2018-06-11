@@ -23,7 +23,6 @@ public class CameraController : MonoBehaviour {
     void Start()
     {
         cam=GetComponent<CinemachineVirtualCamera>();
-        offSet.z -= 50;
     }
     void LateUpdate()
     {

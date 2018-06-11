@@ -24,7 +24,7 @@ public class Character : MainBehavior, IAttackable, IHitable, IHealable
     protected float damage, attackSpeed, range, speed;
     protected int hp;
 
-    bool gathering,moving;
+    bool gathering,moving,died;
    public bool attacking;
     Vector2 tt;
     float waitTime;
@@ -43,6 +43,11 @@ public class Character : MainBehavior, IAttackable, IHitable, IHealable
     }
     public virtual void Update()
     {
+        if (GPM.gameState == GamePlayState.Finished)
+        {
+            StopWalk();
+            return;
+        }
 
         waitTime += Time.deltaTime;
         if (gathering)
@@ -143,27 +148,31 @@ public class Character : MainBehavior, IAttackable, IHitable, IHealable
         transform.localScale = aa;
         right = !right;
     }
+    public void StartGatthering()
+    {
+        Vector2 middle = Camera.main.transform.position;
+        middle -= (Vector2)CameraController.Instance.offSet;
+        if (Vector2.Distance(transform.position, middle) > 1f)
+            StartCoroutine(Gather(middle));
+    }
 
-
-    public IEnumerator Gather()
+    public IEnumerator Gather(Vector2 middle)
     {
 
         Vector2 direction;
-        Vector2 middle = Camera.main.transform.position;
-        middle -=(Vector2) CameraController.Instance.offSet;
+        
         gathering = true;
         RG.bodyType = RigidbodyType2D.Dynamic;
         for (float i = 0; i < 0.5f; i+=Time.deltaTime)
         {
-            if (gameObject == null)
-            {
-                StopCoroutine(Gather());
-            }
+            if (died)
+                break;
             if (Vector2.Distance(transform.position, middle) < .1f)
                 break;
             direction = middle - (Vector2)transform.position;
             direction.Normalize();
-            RG.velocity = direction * speed * 2;
+            if (RG.bodyType != RigidbodyType2D.Static)
+                RG.velocity = direction * speed * 2;
             yield return null;
         }
             
@@ -173,6 +182,9 @@ public class Character : MainBehavior, IAttackable, IHitable, IHealable
 
     void StopWalk()
     {
+
+        if (died)
+            return;
         if (RG.bodyType == RigidbodyType2D.Static)
             return;
         RG.velocity = Vector2.zero;
@@ -199,7 +211,8 @@ public class Character : MainBehavior, IAttackable, IHitable, IHealable
 
     public void Die()
     {
-        StopAllCoroutines();
+        died = true;
+        
         Destroy(gameObject);
     }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GamePlayInput : MonoBehaviour
 {
@@ -21,15 +22,19 @@ public class GamePlayInput : MonoBehaviour
     [HideInInspector]
     public bool move;
 
+    GamePlayManager GPM;
     Touch[] touches;
     void Start()
     {
         JS.gameObject.SetActive(false);
-
+        GPM = GamePlayManager.Instance;
     }
 
     void Update()
     {
+
+        if (GPM.gameState == GamePlayState.Finished)
+            return;
 
         #region Inputs
         if (Application.isMobilePlatform)
@@ -44,7 +49,7 @@ public class GamePlayInput : MonoBehaviour
                 switch (touches[0].phase)
                 {
                     case TouchPhase.Began:
-                        if (touches[0].tapCount == 1)
+                        if (touches[0].tapCount == 1&& !EventSystem.current.IsPointerOverGameObject(touches[0].fingerId))
                             JoyStickTurnOn(Camera.main.ScreenToWorldPoint(touches[0].position));
                         break;
                     case TouchPhase.Ended:
@@ -64,7 +69,7 @@ public class GamePlayInput : MonoBehaviour
                 switch (touches[0].phase)
                 {
                     case TouchPhase.Began:
-                        if (touches[0].tapCount == 1)
+                        if (touches[0].tapCount == 1 && !EventSystem.current.IsPointerOverGameObject(touches[0].fingerId))
                             JoyStickTurnOn(Camera.main.ScreenToWorldPoint(touches[0].position));
                         break;
                     case TouchPhase.Ended:
@@ -75,7 +80,7 @@ public class GamePlayInput : MonoBehaviour
                 }
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0)&& !EventSystem.current.IsPointerOverGameObject())
                 JoyStickTurnOn(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             else if (Input.GetMouseButtonUp(0))
                 JoyStickTurnOff();
@@ -108,7 +113,7 @@ public class GamePlayInput : MonoBehaviour
         Character[] tt = GameObject.FindObjectsOfType<Character>();
         foreach (var item in tt)
         {
-            StartCoroutine(item.Gather());
+            item.StartGatthering();
         }
     }
 

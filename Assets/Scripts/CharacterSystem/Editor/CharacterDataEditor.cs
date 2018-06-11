@@ -123,6 +123,7 @@ public class CharacterDataEditor : EditorWindow{
         temp.characterNameCode = GUILayout.TextField(temp.characterNameCode, GUILayout.Width(100));
         GUILayout.Label("Character Quality:");
         temp.Quality = (CharacterQuality)EditorGUILayout.EnumPopup(temp.Quality, GUILayout.Width(100));
+
         GUILayout.EndHorizontal();
 
         GUILayout.Space(25);
@@ -132,6 +133,8 @@ public class CharacterDataEditor : EditorWindow{
         temp.prefab = EditorGUILayout.ObjectField(temp.prefab, typeof(GameObject), false) as GameObject;
         GUILayout.Label("HitPoint:");
         temp.hp = EditorGUILayout.IntField( temp.hp);
+        GUILayout.Label("Character Type:");
+        temp.Type = (CharacterType)EditorGUILayout.EnumPopup(temp.Type, GUILayout.Width(100));
         GUILayout.EndHorizontal();
 
 
@@ -184,8 +187,6 @@ public class CharacterDataEditor : EditorWindow{
         GUILayout.Label("Start Spawn Count:");
         temp.startSpawnCount = EditorGUILayout.IntSlider(temp.startSpawnCount, 3, 10);
         GUILayout.Space(15);
-        GUILayout.Label("Spawn Per Level Count:");
-        temp.increaseCount = EditorGUILayout.IntSlider(temp.increaseCount, 3, 10);
 
         GUILayout.EndHorizontal();
 
@@ -217,7 +218,6 @@ public class CharacterDataEditor : EditorWindow{
             a.hp = temp.hp;
             a.damage = temp.damage;
             a.startSpawnCount = temp.startSpawnCount;
-            a.increaseCount = temp.increaseCount;
             a.Code = temp.Code;
             a.range = temp.range;
 
@@ -294,6 +294,7 @@ public class CharacterDataEditor : EditorWindow{
             GUILayout.BeginHorizontal();
             GUILayout.Label("Character Name Code:");
             EditTemp.characterNameCode=EditTemp.name = GUILayout.TextField(EditTemp.characterNameCode, GUILayout.Width(100));
+            EditTemp.name = EditTemp.characterNameCode;
             GUILayout.Label("Character Quality:");
             EditTemp.Quality = (CharacterQuality)EditorGUILayout.EnumPopup(EditTemp.Quality, GUILayout.Width(100));
             GUILayout.EndHorizontal();
@@ -305,6 +306,8 @@ public class CharacterDataEditor : EditorWindow{
             EditTemp.prefab = EditorGUILayout.ObjectField(EditTemp.prefab, typeof(GameObject), false) as GameObject;
             GUILayout.Label("HitPoint:");
             EditTemp.hp = EditorGUILayout.IntField(EditTemp.hp);
+            GUILayout.Label("Character Type:");
+            temp.Type = (CharacterType)EditorGUILayout.EnumPopup(temp.Type, GUILayout.Width(100));
             GUILayout.EndHorizontal();
 
 
@@ -357,8 +360,7 @@ public class CharacterDataEditor : EditorWindow{
             GUILayout.Label("Start Spawn Count:");
             EditTemp.startSpawnCount = EditorGUILayout.IntSlider(EditTemp.startSpawnCount, 3, 10);
             GUILayout.Space(15);
-            GUILayout.Label("Spawn Per Level Count:");
-            EditTemp.increaseCount = EditorGUILayout.IntSlider(EditTemp.increaseCount, 3, 10);
+
 
             GUILayout.EndHorizontal();
 
